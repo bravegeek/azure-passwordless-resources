@@ -1,0 +1,32 @@
+# set region, resource group, az container registry
+region=eastus
+rgName=will-htmx
+# sqlServerName=mocajaxSqlServer
+# sqlDbName=mocajaxSqlDb
+# sqlAdminUserName=${sqlServerName}AdminUser
+appSvcName=htmxappsvc
+appSvcPlanName=htmxappsvcplan
+acrName=htmxacr
+managedIdentityName=htmxghactionid
+
+# same as workflow
+dockerImageName=htmx-image
+# same as dockerfile
+dockerPort=8080
+
+# set default region and rg
+az config set defaults.location=$region defaults.group=$rgName
+
+
+# https://learn.microsoft.com/en-us/azure/container-registry/container-registry-import-images?tabs=azure-cli#import-from-docker-hub
+#
+# import an image from a public repo
+az acr import \
+  --name $acrName \
+  --source docker.io/peerjs/peerjs-server:latest \
+  --image peerjs-server:latest
+
+# show some meta-data for the image, not too useful
+az acr manifest list-metadata \
+  --registry $acrName \
+  --name peerjs-server
